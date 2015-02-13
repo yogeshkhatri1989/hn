@@ -1,0 +1,62 @@
+<!doctype html>
+
+<html>
+  
+  <head>
+    
+    <title>Hacker News</title>
+    
+    
+    <link rel="stylesheet" href="css/hn.css">
+    
+    <script src="bower_components/webcomponentsjs/webcomponents.min.js"></script>
+    
+    <link rel="import" href="bower_components/core-label/core-label.html">
+    <link rel="import" href="bower_components/core-toolbar/core-toolbar.html">
+    <link rel="import" href="bower_components/core-header-panel/core-header-panel.html">
+
+    <link rel="import" href="bower_components/paper-checkbox/paper-checkbox.html">
+
+    
+    <link rel="import" href="elements/hn-card.html">
+    
+    <script src="js/hn.js"></script>
+  
+  </head>
+  
+  <body fullbleed layout vertical>
+    
+    <core-header-panel id ="hnSite" flex mode="waterfall">
+
+      <core-ajax
+        auto
+        id="top-stories-ajax"
+        url="https://hacker-news.firebaseio.com/v0/topstories.json"></core-ajax>
+
+      
+      <core-toolbar>
+        
+        <div class="title">
+          Hacker News
+        </div>
+        
+        <span flex></span>
+                  
+        <core-label layout horizontal center justified id = "new-tab">
+          <paper-checkbox for></paper-checkbox>
+          <div>
+            Open in new tab
+          </div>
+        </core-label>
+
+      </core-toolbar>
+      
+      <div class="content" id = "site-content" layout vertical center>
+        <paper-spinner active class="stories-loading loading"></paper-spinner>
+      </div>
+
+    </core-header-panel>
+    
+  </body>
+  
+</html>

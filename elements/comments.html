@@ -1,0 +1,99 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/core-ajax/core-ajax.html">
+
+<polymer-element name="story-comments" attributes="commentsUrl itemId">
+  
+  <template>
+    <core-ajax
+      auto
+      url="{{commentsUrl}}"
+      on-core-response="{{handleResponse}}">
+    </core-ajax>
+    
+    <div id = "comment" layout vertical start-justified>
+
+      <div id = "commentsLoading" class="loading" layout horizontal center center-justified>
+        <paper-spinner active></paper-spinner>
+      </div>
+      
+      <div id = "commentsMainCont" hidden>
+      
+
+        <div id = "commentsText">
+
+        </div>
+
+        <div id = "commentsInfo" layout horizontal>
+          <div class="comment-author" flex>
+            By {{item.by}}
+          </div>
+
+          <div class="comment-replies" flex>
+            {{item.kids.length}} Replies
+          </div>
+        </div>
+        
+        <div id = "replies">
+          
+        </div>
+
+      </div>
+
+    </div>
+    
+    <style>
+      
+      #comment {
+        width: 94%;
+        margin: auto;
+        padding: 10px;
+        padding-left: 5%;
+        padding-right: 0;
+/*        border-left: 1px solid darkgray;*/
+        margin-left: -1px;
+      }
+      
+      #commentsText {
+        margin: 10px 0 0 0;
+      }
+      
+      #commentsInfo {
+        color: gray;
+      }
+    </style>
+    
+  </template>
+  
+  <script>
+    Polymer({
+      ready: function(){
+        
+      },
+      itemIdChanged: function(){
+        var itemId = this.itemId;
+        this.commentsUrl = "https://hacker-news.firebaseio.com/v0/item/" + itemId + ".json";
+      },
+      handleResponse: function(data){
+        this.item = data.detail.response;
+        
+        if (this.item.deleted){
+          this.$.comment.hidden = true;
+          return;
+        }
+
+        this.injectBoundHTML(this.item.text, this.$.commentsText);
+        this.$.commentsLoading.hidden = true;
+        this.$.commentsMainCont.hidden = false;
+        
+        var kids = this.item.kids || [];
+
+        for (var i = 0; i < kids.length; i++){
+          var storyComment = document.createElement("story-comments");
+          storyComment.setAttribute("itemId", kids[i]);
+          this.$.replies.appendChild(storyComment);
+        }
+      }
+      
+    });
+  </script>
+</polymer-element>

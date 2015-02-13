@@ -1,0 +1,53 @@
+body {
+  background: #EAEAEA;
+}
+
+core-header-panel {
+  height: 200px; 
+}
+
+core-toolbar {
+  background-color: #077C8B;
+}
+
+core-toolbar .title {
+  color: white;
+}
+
+paper-tabs {
+  font-family: RobotoDraft, 'Helvetica Neue', Helvetica, Arial;
+  font-size: 14px;
+  width: 200px;
+  color: white;
+  font-weight: bolder;
+}
+
+.stories-loading.loading {
+  transform: translate(-24px, 0);
+}
+
+
+#new-tab {
+  width: 175px;
+  color: white;
+}
+
+#new-tab paper-checkbox::shadow #ink[checked] {
+  color: initial;
+}
+
+#new-tab paper-checkbox::shadow #checkbox.checked {
+  border-color: #71FF00;
+}
+ 
+#new-tab paper-checkbox::shadow #ink {
+  color: white;
+}
+
+#new-tab paper-checkbox::shadow #checkbox {
+  border-color: white;
+}
+
+#site-content {
+  padding: 20px;
+}
