@@ -27,14 +27,5 @@
     "web-animations-next.dev.js",
     "web-animations-next-lite.dev.html",
     "web-animations-next-lite.dev.js"
-  ],
-  "_release": "8780b6b6c8",
-  "_resolution": {
-    "type": "branch",
-    "branch": "master",
-    "commit": "8780b6b6c8f248bb37ca4c9e9f71497dd818e204"
-  },
-  "_source": "git://github.com/web-animations/web-animations-next.git",
-  "_target": "master",
-  "_originalSource": "web-animations/web-animations-next"
+  ]
 }

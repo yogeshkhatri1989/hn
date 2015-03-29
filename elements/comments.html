@@ -1,7 +1,7 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/core-ajax/core-ajax.html">
 
-<polymer-element name="story-comments" attributes="commentsUrl itemId">
+<polymer-element name="story-comments" attributes="commentsUrl itemId dataItemId top">
   
   <template>
     <core-ajax
@@ -28,8 +28,8 @@
             By {{item.by}}
           </div>
 
-          <div class="comment-replies" flex>
-            {{item.kids.length}} Replies
+          <div class="comment-replies" id="getReplies" flex>
+            {{item.kids.length}} {{replyText}}
           </div>
         </div>
         
@@ -49,8 +49,8 @@
         padding: 10px;
         padding-left: 5%;
         padding-right: 0;
-/*        border-left: 1px solid darkgray;*/
         margin-left: -1px;
+/*        border-left: 1px solid black;*/
       }
       
       #commentsText {
@@ -60,6 +60,10 @@
       #commentsInfo {
         color: gray;
       }
+      
+      .comment-replies {
+        cursor: pointer;
+      }
     </style>
     
   </template>
@@ -68,12 +72,30 @@
     Polymer({
       ready: function(){
         
+        var that = this; 
+        this.$.commentsLoading.hidden = true;
+        this.$.commentsMainCont.hidden = true;
+        
+        this.$.getReplies.addEventListener("click", function(e){
+          
+          var storyComments = that.$.replies.querySelectorAll("story-comments");
+          for (var i = 0; i < storyComments.length; i++){
+            var storyComment = storyComments[i];
+            storyComment.hidden = !storyComment.hidden;
+            storyComment.setAttribute("itemId", storyComment.dataItemId);
+          }
+        });
       },
       itemIdChanged: function(){
+        
         var itemId = this.itemId;
+        this.$.commentsLoading.hidden = false;
+        this.$.commentsMainCont.hidden = true;
+        this.hidden = false;
         this.commentsUrl = "https://hacker-news.firebaseio.com/v0/item/" + itemId + ".json";
       },
       handleResponse: function(data){
+        
         this.item = data.detail.response;
         
         if (this.item.deleted){
@@ -86,10 +108,18 @@
         this.$.commentsMainCont.hidden = false;
         
         var kids = this.item.kids || [];
+        this.replyText = kids.length > 1 ? "replies" : "reply";
+        if (!kids.length) this.replyText = "";
 
         for (var i = 0; i < kids.length; i++){
           var storyComment = document.createElement("story-comments");
-          storyComment.setAttribute("itemId", kids[i]);
+          if (this.top){
+            storyComment.dataItemId = kids[i];
+          } else {
+            storyComment.dataItemId = kids[i];
+            storyComment.itemId = kids[i];
+          }
+          storyComment.hidden = true;
           this.$.replies.appendChild(storyComment);
         }
       }

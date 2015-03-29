@@ -345,6 +345,7 @@
           for (var i = 0; i < kids.length; i++){
             var storyComment = document.createElement("story-comments");
             storyComment.setAttribute("itemId", kids[i]);
+            storyComment.top = true;
             comments.appendChild(storyComment);
           }
           
