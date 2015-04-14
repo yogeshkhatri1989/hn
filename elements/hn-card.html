@@ -49,7 +49,7 @@
         <div id="commentsTextCont" layout vertical center center-justified>
           <div class = "comments-cont" layout vertical center center-justified>
 <!--            <core-icon icon="reply"></core-icon>-->
-            <div class="num-replies">{{item.kids.length}}</div>
+            <div class="num-replies">{{item.descendants}}</div>
             <div>
               {{item.commentsText}}
             </div>
@@ -243,6 +243,7 @@
         transition: transform 250ms ease-out;
         transform: scale(1, 0);
         transform-origin: center center;
+        
       }
       
     </style>
@@ -264,7 +265,7 @@
         this.item = data.detail.response;
         this.item.displayUrl = new URL(this.item.url).host;
         
-        this.item.commentsText = (this.item.kids || []).length == 1 ? "Reply" : "Replies";
+        this.item.commentsText = this.item.descendants == 1 ? "Comment" : "Comments";
         
         var timeByAgo = (Date.now()/1000) - this.item.time;
         
