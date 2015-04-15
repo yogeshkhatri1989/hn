@@ -25,30 +25,29 @@
         <div class="story-content" layout vertical flex>
           
           <div id="title" flex>
-            <a href="{{item.url}}" target="_blank">{{item.title}}</a>
+            <a class="story-link" href="{{item.url}}" target="_blank">{{item.title}}</a>
             <span class="url-cont"> ({{item.displayUrl}})</span>
           </div>
 
           <div class="bottom-bar" layout horizontal>
-              <div id = "points" flex>
-                {{item.score}} points 
-              </div>
-              
-              <div id = "user" flex>
-                by {{item.by}}
-              </div>
             
-              <div id = "time" flex>
-                {{item.timeByAgo}}
-              </div>
-            
+            <div id = "points" flex>
+              {{item.score}} points 
+            </div>
 
+            <div id = "user" data-user-id="{{item.by}}" flex>
+              by {{item.by}}
+            </div>
+
+            <div id = "time" flex>
+              {{item.timeByAgo}}
+            </div>
+            
           </div>
         </div>
         
         <div id="commentsTextCont" layout vertical center center-justified>
           <div class = "comments-cont" layout vertical center center-justified>
-<!--            <core-icon icon="reply"></core-icon>-->
             <div class="num-replies">{{item.descendants}}</div>
             <div>
               {{item.commentsText}}
@@ -59,8 +58,9 @@
         </div>
       
       </div>
+
     </div>
-    
+
     <div class="story-comments-connector"></div>
     
     <div id = "commentsCont">
@@ -86,7 +86,7 @@
       }
       
       :host(.show-comments) #storyCont {
-/*        background: rgba(0, 0, 0, 0.1);*/
+        /*        background: rgba(0, 0, 0, 0.1);*/
       }
       
       :host(.show-comments.show-comment) #storyCont {
@@ -245,6 +245,10 @@
         transform-origin: center center;
         
       }
+
+      #user {
+        cursor: pointer;
+      }
       
     </style>
 
@@ -253,6 +257,12 @@
     Polymer({
       ready: function() {
         
+        this.$.user.addEventListener("click", function(e){
+          var $userInfo = document.getElementById("userInfo");
+          $userInfo.setAttribute("userId", this.getAttribute("data-user-id"));
+          $userInfo.open();
+        });
+
       },
       itemIdChanged: function(){
         var itemId = this.itemId;  
@@ -267,36 +277,24 @@
         
         this.item.commentsText = this.item.descendants == 1 ? "Comment" : "Comments";
         
-        var timeByAgo = (Date.now()/1000) - this.item.time;
-        
-        var timeNames = [
-          {name: "Second", value: timeByAgo },
-          {name: "Minute", value: timeByAgo / (60) },
-          {name: "Hour",   value: timeByAgo / (60 * 60)},
-          {name: "Day",    value: timeByAgo / (24 * 60 * 60) },
-          {name: "Month",  value: timeByAgo / (30 * 24 * 60 * 60) },
-          {name: "Year",   value: timeByAgo / (365 * 30 * 24 * 60 * 60) }
-        ];
-        
-        var i;
-        for (i = 0; i <= timeNames.length; i++){
-          if (timeNames[i].value < 1){
-            i--;
-            break;
-          }
-        }
-        
-        timeByAgo = parseInt(timeNames[i].value);
-        var name = timeByAgo == 1 ? timeNames[i].name : timeNames[i].name + "s";
-        
-        this.item.timeByAgo = timeByAgo + " " + name.toLowerCase() + " ago";
+        this.item.timeByAgo = getTimeByAgo(this.item.time);
         
         var that = this;
         var isOpen = true;
+        var storyLink = that.$.title.querySelector(".story-link");
+        
+        if (that.item.title.indexOf("Ask HN") >= 0 && that.item.text){
+          that.item.kids.unshift(that.item.id);
+
+          storyLink.addEventListener("click", function(e){
+            that.$.commentsTextCont.dispatchEvent(new Event("click"));
+            return false;
+          });
+        }
         
         this.$.commentsTextCont.addEventListener("click", function(){
           
-          isOpen = !isOpen;          
+          isOpen = !isOpen;
           
           var allElems = document.querySelectorAll("hn-card").array();
           var currIndex = allElems.indexOf(that);
@@ -320,44 +318,52 @@
             })(allElems[i]), timeDelay);
 
           }
-          
-          setTimeout(function(){
-//            that.$.commentsTextCont.classList.add("comments-loading");
-          }, 500);
-          
-          var commentsCont = that.$.commentsCont;
-          var comments = commentsCont.querySelector(".comments");
-          
-          while (comments.firstChild) {
-            comments.removeChild(comments.firstChild);
-          }
-          var windowHeight = window.innerHeight;
-          
-          var currentScroll = that.offsetParent.scrollTop;
-          var commentTop = that.offsetTop - currentScroll;
-          
-          comments.style.height = (windowHeight - 84) + "px";
-          comments.style.top = (-commentTop) + "px";
-          comments.style.transformOrigin = "center " + commentTop + "px";
-          
-          
-          var kids = that.item.kids;
 
-          for (var i = 0; i < kids.length; i++){
-            var storyComment = document.createElement("story-comments");
-            storyComment.setAttribute("itemId", kids[i]);
-            storyComment.top = true;
-            comments.appendChild(storyComment);
-          }
-          
+          setTimeout(function(){
+            var $comments = that.$.commentsCont.querySelector(".comments");
+            
+            removeOldComments($comments);
+            styleComments(that, $comments);
+            addComments($comments, that.item.kids);
+          }, 200)
+            
         });
         
         this.classList.remove("init");
         document.querySelector(".stories-loading").hidden = true;
-
-      }
-      
+      }      
     });
+
+
+    // remove previous comments if any
+    function removeOldComments($comments){
+
+      while ($comments.firstChild) {
+        $comments.removeChild($comments.firstChild);
+      }
+    }
+
+    // setting dimesions and position of comments
+    function styleComments($story, $comments){
+
+      var commentTop = $story.offsetTop - $story.offsetParent.scrollTop;
+      
+      $comments.style.height = (window.innerHeight - 84) + "px";
+      $comments.style.top = (-commentTop) + "px";
+      $comments.style.transformOrigin = "center " + commentTop + "px";
+      
+    }
+
+    // add comments to 
+    function addComments($comments, kids){
+
+      for (var i = 0; i < kids.length; i++){
+        var storyComment = document.createElement("story-comments");
+        storyComment.setAttribute("itemId", kids[i]);
+        storyComment.top = true;
+        $comments.appendChild(storyComment);
+      }
+    }
     
   </script>
   

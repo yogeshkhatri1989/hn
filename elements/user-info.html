@@ -1,0 +1,92 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-spinner/paper-spinner.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+
+<polymer-element name="user-info" attributes="userId" constructor="UserInfo" transition="core-transition-center" extends="paper-dialog">
+
+  <template>
+    <core-ajax
+      auto
+      url="{{userInfoUrl}}"
+      on-core-response="{{handleResponse}}">
+    </core-ajax>
+
+    <div id="content" fullbleed layout vertical>
+
+      <div class="title" layout horizontal center center-justified>
+        <h2>{{userId}}</h2>
+      </div>
+
+      <div class="info-cont" flex layout vertical start start-justified>
+        <paper-spinner active id="infoLoading"></paper-spinner>
+        <div id="info" layout vertical hidden>
+          
+          <div><strong>{{userInfo.karma}}</strong> Karma</div>
+          <div>Created {{userInfo.timeByAgo}}</div>
+
+          <div layout vertical>
+            <div id = "about"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="action" layout horizontal center end-justified>
+        <paper-button dismissive>Close</paper-button>
+      </div>
+    </div>
+
+    <style>
+      #content {
+        padding: 12px 28px;
+        width: 400px;
+        height: 500px;
+      }
+
+      #about {
+        max-height: 300px;
+        overflow-y: auto;
+        margin-top: 8px;
+      }
+    </style>
+
+  </template>  
+
+  <script>
+
+    Polymer({
+      ready: function(){
+
+        this.target = this;
+        this.heading = this.userId;
+        if (this.userId){
+          this.userInfoUrl = "https://hacker-news.firebaseio.com/v0/user/" + this.userId + ".json"
+        }
+
+        var dialog = this;
+        this.$.content.querySelector("[dismissive]").addEventListener("click", function(){
+          dialog.toggle();
+        });
+
+      },
+      userIdChanged: function(){
+
+        this.$.infoLoading.hidden = false;
+        this.$.info.hidden = true;
+        if (this.userId){
+          this.userInfoUrl = "https://hacker-news.firebaseio.com/v0/user/" + this.userId + ".json"
+        }
+      },
+      handleResponse: function(data){
+
+        this.$.infoLoading.hidden = true;
+        this.$.info.hidden = false;
+        this.userInfo = data.detail.response;
+        this.userInfo.timeByAgo = getTimeByAgo(this.userInfo.created);
+        this.injectBoundHTML(this.userInfo.about || "", this.$.about);
+      }
+    });
+
+  </script>
+
+</polymer-element>

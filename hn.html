@@ -17,8 +17,8 @@
 
     <link rel="import" href="bower_components/paper-checkbox/paper-checkbox.html">
 
-    
     <link rel="import" href="elements/hn-card.html">
+    <link rel="import" href="elements/user-info.html">
     
     <script src="js/hn.js"></script>
   
@@ -43,7 +43,7 @@
         <span flex></span>
                   
         <core-label layout horizontal center justified id = "new-tab">
-          <paper-checkbox for></paper-checkbox>
+          <paper-checkbox checked id = "newTabOption"></paper-checkbox>
           <div>
             Open in new tab
           </div>
@@ -55,6 +55,8 @@
         <paper-spinner active class="stories-loading loading"></paper-spinner>
       </div>
 
+      <user-info id="userInfo" backdrop></user-info>
+>
     </core-header-panel>
     
   </body>

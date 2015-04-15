@@ -10,7 +10,7 @@
       on-core-response="{{handleResponse}}">
     </core-ajax>
     
-    <div id = "comment" layout vertical start-justified>
+    <div id = "comment" layout vertical start-justified class="type-{{item.type}}">
 
       <div id = "commentsLoading" class="loading" layout horizontal center center-justified>
         <paper-spinner active></paper-spinner>
@@ -18,19 +18,24 @@
       
       <div id = "commentsMainCont" hidden>
       
-
         <div id = "commentsText">
 
         </div>
 
-        <div id = "commentsInfo" layout horizontal>
-          <div class="comment-author" flex>
+        <div id = "commentsInfo" class="comments-info-cont" layout horizontal>
+          <div class="comment-author" id="user" data-user-id="{{item.by}}" flex>
             By {{item.by}}
           </div>
 
-          <div class="comment-replies" id="getReplies" flex>
+          <div class="comment-time" flex>
+            {{item.timeByAgo}}
+          </div>
+
+          <div class="comment-replies" id="getReplies" flex layout horizontal center center-justified>
+            <paper-ripple class="recenteringTouch" fit></paper-ripple>
             {{item.kids.length}} {{replyText}}
           </div>
+
         </div>
         
         <div id = "replies">
@@ -48,22 +53,38 @@
         margin: auto;
         padding: 10px;
         padding-left: 5%;
-        padding-right: 0;
         margin-left: -1px;
-        
+        margin-top: 20px;
       }
       
       #commentsText {
-        margin: 10px 0 0 0;
-        
+        margin: 10px 0 0 0;        
       }
       
       #commentsInfo {
-        color: gray;
+        color: #8B8B8B;
+        margin-top: 10px;
+      }
+
+      .comment-author {
+        cursor: pointer;
       }
       
+      .type-story {
+        border-bottom: 1px solid black;
+      }
+
+      .type-story #commentsInfo {
+        display: none;
+      }
+
       .comment-replies {
+        position: relative;
         cursor: pointer;
+      }
+
+      #replies {
+        margin-top: -10px;
       }
     </style>
     
@@ -86,6 +107,13 @@
             storyComment.setAttribute("itemId", storyComment.dataItemId);
           }
         });
+
+        this.$.user.addEventListener("click", function(e){
+          var $userInfo = document.getElementById("userInfo");
+          $userInfo.setAttribute("userId", this.getAttribute("data-user-id"));
+          $userInfo.open();
+        });
+
       },
       itemIdChanged: function(){
         
@@ -123,6 +151,8 @@
           storyComment.hidden = true;
           this.$.replies.appendChild(storyComment);
         }
+
+        this.item.timeByAgo = getTimeByAgo(this.item.time);
       }
       
     });
