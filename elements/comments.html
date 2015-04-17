@@ -2,20 +2,20 @@
 <link rel="import" href="../bower_components/core-ajax/core-ajax.html">
 
 <polymer-element name="story-comments" attributes="commentsUrl itemId dataItemId top">
-  
+
   <template>
     <core-ajax
       auto
       url="{{commentsUrl}}"
       on-core-response="{{handleResponse}}">
     </core-ajax>
-    
+
     <div id = "comment" layout vertical start-justified class="type-{{ (item.type == 'story' || item.type == 'job' || item.type == 'poll') ? 'story' : 'comment' }}">
 
       <div id = "commentsLoading" class="loading" layout horizontal center center-justified hidden?="{{init || commentLoaded}}">
         <paper-spinner active></paper-spinner>
       </div>
-      
+
       <div id = "commentsMainCont" hidden?="{{init || !commentLoaded}}">
 
         <template if="{{item.type !== 'comment' && item.type !== 'pollopt'}}">
@@ -25,7 +25,7 @@
         <template if="{{item.type == 'pollopt'}}">
           <strong>Score : </strong> {{item.score}}
         </template>
-        
+
         <div id = "commentsText">
         </div>
 
@@ -48,17 +48,17 @@
         <template if="{{item.type == 'poll'}}" repeat = "{{part in item.parts}}">
           <story-comments itemId="{{part}}"></story-comments>
         </template>
-        
+
         <div id = "replies">
-          
+
         </div>
 
       </div>
 
     </div>
-    
+
     <style>
-      
+
       #comment {
         width: 94%;
         margin: auto;
@@ -67,11 +67,11 @@
         margin-left: -1px;
         margin-top: 20px;
       }
-      
+
       #commentsText {
-        margin: 10px 0 0 0;        
+        margin: 10px 0 0 0;
       }
-      
+
       #commentsInfo {
         color: #8B8B8B;
         margin-top: 10px;
@@ -80,7 +80,7 @@
       .comment-author {
         cursor: pointer;
       }
-      
+
       #comment.type-story {
         border-bottom: 1px solid black;
         margin-top: 0;
@@ -99,13 +99,13 @@
         margin-top: -10px;
       }
     </style>
-    
+
   </template>
-  
+
   <script>
     Polymer({
       ready: function(){
-        
+
         var that = this;
 
         this.commentLoaded = false;
@@ -113,9 +113,9 @@
 
         this.$.commentsLoading.hidden = true;
         this.$.commentsMainCont.hidden = true;
-        
+
         this.$.getReplies.addEventListener("click", function(e){
-          
+
           var storyComments = that.$.replies.querySelectorAll("story-comments");
           for (var i = 0; i < storyComments.length; i++){
             var storyComment = storyComments[i];
@@ -132,7 +132,7 @@
 
       },
       itemIdChanged: function(){
-        
+
         var itemId = this.itemId;
         this.commentLoaded = false;
         this.init = false;
@@ -141,15 +141,15 @@
         this.commentsUrl = "https://hacker-news.firebaseio.com/v0/item/" + itemId + ".json";
       },
       handleResponse: function(data){
-        
+
         this.item = data.detail.response;
-        
+
         if (this.item.deleted){
           this.$.comment.hidden = true;
           return;
         }
 
-        this.injectBoundHTML(this.item.text, this.$.commentsText);
+        this.injectBoundHTML(this.item.text.replace("<a ", "<a target='_blank' "), this.$.commentsText);
         this.commentLoaded = true;
 
         var kids = this.item.kids || [];
@@ -170,7 +170,7 @@
 
         this.item.timeByAgo = getTimeByAgo(this.item.time);
       }
-      
+
     });
   </script>
 </polymer-element>

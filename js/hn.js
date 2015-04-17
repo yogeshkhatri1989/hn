@@ -1,7 +1,7 @@
 function getTimeByAgo(time){
 
   var timeByAgo = (Date.now()/1000) - time;
-  
+
   var timeNames = [
     {name: "Second", value: timeByAgo },
     {name: "Minute", value: timeByAgo / (60) },
@@ -10,7 +10,7 @@ function getTimeByAgo(time){
     {name: "Month",  value: timeByAgo / (30 * 24 * 60 * 60) },
     {name: "Year",   value: timeByAgo / (365 * 24 * 60 * 60) }
   ];
-  
+
   var i;
   for (i = 0; i < timeNames.length; i++){
     if (timeNames[i].value < 1) {
@@ -20,17 +20,17 @@ function getTimeByAgo(time){
   }
 
   i = Math.min(i, timeNames.length - 1);
-  
+
   timeByAgo = parseInt(timeNames[i].value);
-  
+
   var name = timeByAgo == 1 ? timeNames[i].name : timeNames[i].name + "s";
 
   return timeByAgo + " " + name.toLowerCase() + " ago"
-  
+
 }
 
 document.addEventListener('polymer-ready', function() {
-  
+
   var topStoriesAjax = document.getElementById("top-stories-ajax");
   var hnUrl = "https://hacker-news.firebaseio.com/v0/";
 
@@ -43,15 +43,15 @@ document.addEventListener('polymer-ready', function() {
   }
 
   window.addEventListener("hashchange", function(e){
-    
+
     var hash = window.location.hash.slice(1) || "top";
 
     hash = storyTypes[hash] ? hash : "top";
     topStoriesAjax.url = hnUrl + storyTypes[hash];
-    
+
     var hnCards = document.querySelectorAll("hn-card").array()
     hnCards.forEach(function($elem){
-      $elem.parentNode.removeChild($elem);    
+      $elem.parentNode.removeChild($elem);
     });
 
     var navTabs = document.querySelector(".nav-tabs");
@@ -81,23 +81,8 @@ document.addEventListener('polymer-ready', function() {
       // hnCard.classList.add("init");
       siteContent.appendChild(hnCard);
     }
- 
-    document.querySelector(".stories-loading").hidden = true;
-    
-  });
-  
-  document.getElementById("newTabOption").addEventListener("change", function(e){
-    
-    if (this.checked){
-      document.querySelectorAll("hn-card").array().forEach(function(hnCard){
-        hnCard.shadowRoot.querySelector(".story-link").setAttribute("target", "_blank");
-      });
-    } else {
 
-      document.querySelectorAll("hn-card").array().forEach(function(hnCard){
-        hnCard.shadowRoot.querySelector(".story-link").removeAttribute("target");
-      });
-    }
+    document.querySelector(".stories-loading").hidden = true;
 
   });
 
