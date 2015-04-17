@@ -16,6 +16,7 @@
     <link rel="import" href="bower_components/core-header-panel/core-header-panel.html">
 
     <link rel="import" href="bower_components/paper-checkbox/paper-checkbox.html">
+    <link rel="import" href="bower_components/paper-tabs/paper-tabs.html">
 
     <link rel="import" href="elements/hn-card.html">
     <link rel="import" href="elements/user-info.html">
@@ -30,8 +31,7 @@
 
       <core-ajax
         auto
-        id="top-stories-ajax"
-        url="https://hacker-news.firebaseio.com/v0/topstories.json"></core-ajax>
+        id="top-stories-ajax"></core-ajax>
 
       
       <core-toolbar>
@@ -40,7 +40,25 @@
           Hacker News
         </div>
         
-        <span flex></span>
+        <div flex layout horizontal self-end center-justified>
+          <paper-tabs class="nav-tabs" style="max-width:500px" flex layout horizontal center>
+            <paper-tab layout horizontal flex center-center>
+              <a layout horizontal center center-justified href="#top">Top</a>
+            </paper-tab>
+            <paper-tab layout horizontal flex center-center>
+              <a layout horizontal center center-justified href="#new">New</a>
+            </paper-tab>
+            <paper-tab layout horizontal flex center-center>
+              <a layout horizontal center center-justified href="#ask">Ask</a>
+            </paper-tab>
+            <paper-tab layout horizontal flex center-center>
+              <a layout horizontal center center-justified href="#show">Show</a>
+            </paper-tab>
+            <paper-tab layout horizontal flex center-center>
+              <a layout horizontal center center-justified href="#job">Jobs</a>
+            </paper-tab>
+          </paper-tabs>
+        </div>
                   
         <core-label layout horizontal center justified id = "new-tab">
           <paper-checkbox checked id = "newTabOption"></paper-checkbox>
@@ -56,7 +74,7 @@
       </div>
 
       <user-info id="userInfo" backdrop></user-info>
->
+
     </core-header-panel>
     
   </body>

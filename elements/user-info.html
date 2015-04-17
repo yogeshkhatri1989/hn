@@ -19,13 +19,16 @@
       </div>
 
       <div class="info-cont" flex layout vertical start start-justified>
-        <paper-spinner active id="infoLoading"></paper-spinner>
-        <div id="info" layout vertical hidden>
+        <paper-spinner active id="infoLoading" hidden?={{userInfoLoaded}}></paper-spinner>
+        <div id="info" layout vertical hidden?={{!userInfoLoaded}}>
           
-          <div><strong>{{userInfo.karma}}</strong> Karma</div>
-          <div>Created {{userInfo.timeByAgo}}</div>
+          <div class="info-comp">
+            <strong>{{userInfo.karma}}</strong> Karma
+          </div>
 
-          <div layout vertical>
+          <div class="info-comp">Created {{userInfo.timeByAgo}}</div>
+
+          <div class="info-comp" layout vertical>
             <div id = "about"></div>
           </div>
         </div>
@@ -47,6 +50,10 @@
         max-height: 300px;
         overflow-y: auto;
         margin-top: 8px;
+      }
+
+      .info-comp {
+        margin: 10px 0;
       }
     </style>
 
@@ -71,16 +78,14 @@
       },
       userIdChanged: function(){
 
-        this.$.infoLoading.hidden = false;
-        this.$.info.hidden = true;
+        this.userInfoLoaded = false;
         if (this.userId){
           this.userInfoUrl = "https://hacker-news.firebaseio.com/v0/user/" + this.userId + ".json"
         }
       },
       handleResponse: function(data){
 
-        this.$.infoLoading.hidden = true;
-        this.$.info.hidden = false;
+        this.userInfoLoaded = true;
         this.userInfo = data.detail.response;
         this.userInfo.timeByAgo = getTimeByAgo(this.userInfo.created);
         this.injectBoundHTML(this.userInfo.about || "", this.$.about);

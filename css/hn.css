@@ -14,12 +14,12 @@ core-toolbar .title {
   color: white;
 }
 
-paper-tabs {
+.nav-tabs a {
   font-family: RobotoDraft, 'Helvetica Neue', Helvetica, Arial;
-  font-size: 14px;
-  width: 200px;
+  font-size: 1.3em;
   color: white;
   font-weight: bolder;
+  text-decoration: none;
 }
 
 .stories-loading.loading {

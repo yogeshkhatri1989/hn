@@ -16,17 +16,17 @@
  
     <div id="storyCont" layout vertical>
       
-      <div id="story-loading" layout horizontal center center-justified>
+      <div id="story-loading" layout horizontal center center-justified hidden?="{{storyLoaded}}">
         <paper-spinner active></paper-spinner>
       </div>
       
-      <div id="story-details-cont" layout horizontal flex hidden>
+      <div id="story-details-cont" layout horizontal flex hidden?="{{!storyLoaded}}">
         
         <div class="story-content" layout vertical flex>
           
           <div id="title" flex>
             <a class="story-link" href="{{item.url}}" target="_blank">{{item.title}}</a>
-            <span class="url-cont"> ({{item.displayUrl}})</span>
+            <span class="url-cont" hidden?="{{!item.displayUrl}}"> ({{item.displayUrl}})</span>
           </div>
 
           <div class="bottom-bar" layout horizontal>
@@ -46,7 +46,7 @@
           </div>
         </div>
         
-        <div id="commentsTextCont" layout vertical center center-justified>
+        <div id="commentsTextCont" layout vertical center center-justified hidden?="{{item.type=='job'}}">
           <div class = "comments-cont" layout vertical center center-justified>
             <div class="num-replies">{{item.descendants}}</div>
             <div>
@@ -79,6 +79,11 @@
       :host(.init) {
         opacity: 0;
         transform: translate(0, 40px);
+      }
+      
+      :host(.revInit) {
+        opacity: 0;
+        transform: translate(0, -40px);
       }
       
       :host(.show-comments) {
@@ -244,6 +249,7 @@
         transform: scale(1, 0);
         transform-origin: center center;
         
+        overflow-x: hidden;
       }
 
       #user {
@@ -257,6 +263,7 @@
     Polymer({
       ready: function() {
         
+        this.storyLoaded = false;
         this.$.user.addEventListener("click", function(e){
           var $userInfo = document.getElementById("userInfo");
           $userInfo.setAttribute("userId", this.getAttribute("data-user-id"));
@@ -269,11 +276,10 @@
         this.storyUrl = "https://hacker-news.firebaseio.com/v0/item/" + itemId + ".json";
       },
       handleResponse: function(data){
-        this.$["story-loading"].hidden = true;
-        this.$["story-details-cont"].hidden = false;
+
         
         this.item = data.detail.response;
-        this.item.displayUrl = new URL(this.item.url).host;
+        this.item.displayUrl = new URL(this.item.url || "").host;
         
         this.item.commentsText = this.item.descendants == 1 ? "Comment" : "Comments";
         
@@ -283,14 +289,19 @@
         var isOpen = true;
         var storyLink = that.$.title.querySelector(".story-link");
         
-        if (that.item.title.indexOf("Ask HN") >= 0 && that.item.text){
+        if (!that.item.url && that.item.text){
+
+          that.item.kids = that.item.kids || [];
+
           that.item.kids.unshift(that.item.id);
 
           storyLink.addEventListener("click", function(e){
             that.$.commentsTextCont.dispatchEvent(new Event("click"));
+            e.preventDefault();
             return false;
           });
         }
+        this.storyLoaded = true;
         
         this.$.commentsTextCont.addEventListener("click", function(){
           
@@ -330,7 +341,6 @@
         });
         
         this.classList.remove("init");
-        document.querySelector(".stories-loading").hidden = true;
       }      
     });
 
@@ -356,6 +366,8 @@
 
     // add comments to 
     function addComments($comments, kids){
+
+      kids = kids || [];
 
       for (var i = 0; i < kids.length; i++){
         var storyComment = document.createElement("story-comments");

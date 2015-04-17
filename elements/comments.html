@@ -10,19 +10,26 @@
       on-core-response="{{handleResponse}}">
     </core-ajax>
     
-    <div id = "comment" layout vertical start-justified class="type-{{item.type}}">
+    <div id = "comment" layout vertical start-justified class="type-{{ (item.type == 'story' || item.type == 'job' || item.type == 'poll') ? 'story' : 'comment' }}">
 
-      <div id = "commentsLoading" class="loading" layout horizontal center center-justified>
+      <div id = "commentsLoading" class="loading" layout horizontal center center-justified hidden?="{{init || commentLoaded}}">
         <paper-spinner active></paper-spinner>
       </div>
       
-      <div id = "commentsMainCont" hidden>
-      
-        <div id = "commentsText">
+      <div id = "commentsMainCont" hidden?="{{init || !commentLoaded}}">
 
+        <template if="{{item.type !== 'comment' && item.type !== 'pollopt'}}">
+          <h3>{{item.title}}</h3>
+        </template>
+
+        <template if="{{item.type == 'pollopt'}}">
+          <strong>Score : </strong> {{item.score}}
+        </template>
+        
+        <div id = "commentsText">
         </div>
 
-        <div id = "commentsInfo" class="comments-info-cont" layout horizontal>
+        <div id = "commentsInfo" class="comments-info-cont" layout horizontal hidden?="{{item.type != 'comment'}}">
           <div class="comment-author" id="user" data-user-id="{{item.by}}" flex>
             By {{item.by}}
           </div>
@@ -37,6 +44,10 @@
           </div>
 
         </div>
+
+        <template if="{{item.type == 'poll'}}" repeat = "{{part in item.parts}}">
+          <story-comments itemId="{{part}}"></story-comments>
+        </template>
         
         <div id = "replies">
           
@@ -70,12 +81,13 @@
         cursor: pointer;
       }
       
-      .type-story {
+      #comment.type-story {
         border-bottom: 1px solid black;
+        margin-top: 0;
       }
 
-      .type-story #commentsInfo {
-        display: none;
+      #comment.type-story #replies {
+        margin-top: 0;
       }
 
       .comment-replies {
@@ -94,7 +106,11 @@
     Polymer({
       ready: function(){
         
-        var that = this; 
+        var that = this;
+
+        this.commentLoaded = false;
+        this.init = true;
+
         this.$.commentsLoading.hidden = true;
         this.$.commentsMainCont.hidden = true;
         
@@ -118,8 +134,9 @@
       itemIdChanged: function(){
         
         var itemId = this.itemId;
-        this.$.commentsLoading.hidden = false;
-        this.$.commentsMainCont.hidden = true;
+        this.commentLoaded = false;
+        this.init = false;
+
         this.hidden = false;
         this.commentsUrl = "https://hacker-news.firebaseio.com/v0/item/" + itemId + ".json";
       },
@@ -133,9 +150,8 @@
         }
 
         this.injectBoundHTML(this.item.text, this.$.commentsText);
-        this.$.commentsLoading.hidden = true;
-        this.$.commentsMainCont.hidden = false;
-        
+        this.commentLoaded = true;
+
         var kids = this.item.kids || [];
         this.replyText = kids.length > 1 ? "replies" : "reply";
         if (!kids.length) this.replyText = "";
