@@ -1,5 +1,5 @@
 # hn
-Material design based hacker news client using Polymer
+Hacker news client using Polymer/React
 
 
 [DEMO](http://yogeshkhatri1989.github.io/hn) 
