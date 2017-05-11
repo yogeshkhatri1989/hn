@@ -55,7 +55,7 @@ class App extends Component {
     return (
       <div>
         <div className="stories-cont">
-          {stories}
+          {stories.length ? stories : "Loading..."}
         </div>
       </div>
     );

@@ -6,6 +6,7 @@ import {
 } from 'react-router-dom';
 
 import StoryComment from './StoryComment';
+import UserProfile from './UserProfile';
 
 class Story extends Component {
   
@@ -69,17 +70,25 @@ class Story extends Component {
 
               <div className="bottom-bar">
                 <span ref="storyScore" className="story-prop story-score">{story.score} Points</span>
-                <span className="story-prop story-by">By {story.by}</span>
+                <span className="story-prop story-by">
+                  <Link to={`/story/${storyCont}/user/${story.id}/${story.by}`} className="user-profile-link">
+                    By {story.by}
+                  </Link>
+                </span>
                 <span className="story-prop story-time">{story.timeByAgo}</span>
               </div>
             </div>
 
-            <Link to={`/story/${storyCont}/${story.id}`} ref="storyDescendants" className="right-side">
-              {story.descendants} Comments
+            <Link to={`/story/${storyCont}/${story.id}`} className="right-side">
+              <span ref="storyDescendants">{story.descendants} Comments</span>
             </Link>
 
             <Route path={`/story/:storyType/${story.id}`} render={(props) => (
               <StoryComment firebaseRootRef={this.props.firebaseRootRef} {...props} story={story} />
+            )} />
+
+            <Route path={`/story/:storyType/user/${story.id}/:userId`} render={(props) => (
+              <UserProfile firebaseRootRef={this.props.firebaseRootRef} {...props} />
             )} />
 
           </div> :

@@ -112,6 +112,11 @@ body {
           margin-right: 30px;
         }
 
+        a {
+          text-decoration: none;
+          color: inherit;
+        }
+
       }
       
     }
@@ -145,23 +150,33 @@ body {
 
   }
 
-  .story-comment {
+
+  .model-cont {
+
     position: fixed;
-    top: 64px;
     left: 0;
-    right: 0;
-    min-height: 100%;
+    top: 64px;
+    width: 100%;
+    z-index: 300;
 
-    background: rgba(0, 0, 0, 0.6);
-    z-index: 200;
+    .backdrop {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      min-height: 100%;
 
-    .story-comments-cont {
+      background: rgba(0, 0, 0, 0.6);
+    }
+
+    .hn-model {
       max-width: 850px;
       width: 90%;
       margin: 20px auto;
       background: white;
+      position: relative;
 
-      .story-detail {
+      .hn-model-title {
         font-size: 1.2em;
         padding: 20px;
         background: rgba(0, 150, 136, 0.14);
@@ -175,53 +190,58 @@ body {
         }
       }
 
-      .comments-cont {
+      .hn-model-content {
         padding: 20px;
         height: ~"calc(100vh - 160px)";
         box-sizing: border-box;
         overflow: scroll;
       }
+    }
+  }
 
-      .hn-comment {
-        margin: 0 0 20px 0;
 
-        .story {
-          border-bottom: 1px solid black;
-          margin-bottom: 20px;
+  .hn-comment {
+    margin: 0 0 20px 0;
+
+    .story {
+      border-bottom: 1px solid black;
+      margin-bottom: 20px;
+    }
+
+    p {
+      margin-bottom: 0;
+    }
+
+    .bottom-bar {
+      width: 370px;
+      height: 20px;
+      color: gray;
+      padding: 4px 0;
+      font-size: 0.9em;
+      margin-top: 8px;
+
+      .comment-prop {
+        display: inline-block;
+        margin-right: 40px;
+
+        &.comment-replies-btn {
+          cursor: pointer;
         }
 
-        p {
-          margin-bottom: 0;
-        }
-
-        .bottom-bar {
-          width: 370px;
-          height: 20px;
-          color: gray;
-          padding: 4px 0;
-          font-size: 0.9em;
-          margin-top: 8px;
-
-          .comment-prop {
-            display: inline-block;
-            margin-right: 40px;
-
-            &.comment-replies-btn {
-              cursor: pointer;
-            }
-          }
-
-        }
-
-        .comment-replies {
-          margin-left: 20px;
-          margin-top: 10px;
+        a {
+          text-decoration: none;
+          color: inherit;
         }
       }
 
     }
 
+    .comment-replies {
+      margin-left: 20px;
+      margin-top: 10px;
+    }
   }
+
 
 }
 

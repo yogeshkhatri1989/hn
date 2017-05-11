@@ -5,7 +5,8 @@
   "main": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack-dev-server --inline --content-base ."
+    "start": "webpack-dev-server --hot --inline",
+    "build": "webpack -p"
   },
   "keywords": [],
   "author": "Yogesh Khatri (yogeshkhatri1989@gmail.com)",
@@ -29,6 +30,7 @@
     "less": "^2.7.2",
     "less-loader": "^4.0.2",
     "style-loader": "^0.16.1",
+    "webpack": "^2.5.1",
     "webpack-dev-server": "^2.4.2"
   }
 }

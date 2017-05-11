@@ -1,12 +1,20 @@
 import React, { Component } from 'react';
+import {
+  Route,
+  Link
+} from 'react-router-dom';
+
 import ReactFire from 'reactfire';
 import DOMPurify from 'dompurify';
+import UserProfile from './UserProfile';
 
 class Comment extends Component {
 
   constructor(props) {
   
     super(props);
+    this.chainShown = !this.props.isReply;
+
     this.state = {
       replies: []
     };
@@ -22,7 +30,7 @@ class Comment extends Component {
   getReplies() {
 
     this.setState({
-      replies: this.state.replies.length ? [] : this.state.comment.kids
+      replies: this.state.replies.length ? [] : (this.state.comment ? (this.state.comment.kids || []) : [])
     })
   }
 
@@ -30,18 +38,26 @@ class Comment extends Component {
 
     let comment = this.state.comment;
     let commentRepliesBtnText = "";
-
+    
     if (comment) {
       comment.timeByAgo = getTimeByAgo(comment.time);
       commentRepliesBtnText = comment.kids && comment.kids.length ? 
-        (comment.kids.length == 1 ? "1 Reply" : `${comment.kids.length} Resplies`) : 
+        (comment.kids.length == 1 ? "1 Reply" : `${comment.kids.length} Replies`) : 
         "";
+      
+      if (this.props.isReply && !this.chainShown) {
+        setTimeout(() => {
+          this.getReplies();
+        }, 0);
+      }
+      this.chainShown = true;
     }
 
-    let replies = (this.state.replies || []).map(replyId => (
-      <Comment key={`comment-${replyId}`} {...this.props} commentId={replyId} />
+    let replies = (this.state.replies.length ? this.state.replies : []).map(replyId => (
+      <Comment key={`comment-${replyId}`} {...this.props} isReply={true} commentId={replyId} />
     ));
     let storyType = this.props.match.params.storyType;
+    let story = this.props.story;
 
     return (
       <div className="hn-comment">
@@ -54,7 +70,11 @@ class Comment extends Component {
             
             {comment.type == "comment" && 
               <div className="bottom-bar">
-                <span className="comment-prop comment-by">By {comment.by}</span>
+                <span className="comment-prop comment-by">
+                  <Link to={`/story/${storyType}/${story.id}/user/${this.props.commentId}/${comment.by}`} className="user-profile-link">
+                    By {comment.by}
+                  </Link>
+                </span>
                 <span className="comment-prop comment-time">{comment.timeByAgo}</span>
                 
                 <span className="comment-prop comment-replies-btn" onClick={this.getReplies.bind(this)}>
@@ -70,11 +90,14 @@ class Comment extends Component {
           </div> :
           "Loading..."
         }
+
+        <Route path={`/story/${storyType}/${story.id}/user/${this.props.commentId}/:userId`} render={(props) => (
+          <UserProfile firebaseRootRef={this.props.firebaseRootRef} {...props} />
+        )} />
       </div>
     );
   }
 }
-
 
 function getTimeByAgo(time){
 

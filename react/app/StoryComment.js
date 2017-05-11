@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactFire from 'reactfire';
 import Comment from './Comment';
+import Model from './Model';
 
 class StoryComment extends Component {
 
@@ -11,10 +12,6 @@ class StoryComment extends Component {
       story: this.props.story
     }
 
-  }
-
-  closeStoryComment() {
-    this.props.history.goBack();
   }
 
   render() {
@@ -29,19 +26,11 @@ class StoryComment extends Component {
     ));
 
     return (
-      <div className="story-comment"> 
-        <div className="story-comments-cont">
-          <div className="story-detail">
-            <span className="title">{this.state.story.title}</span>
-            <span className="close-btn" onClick={this.closeStoryComment.bind(this)}>X</span>
-          </div>
+      <Model title={this.state.story.title} {...this.props}>
 
-          <div className="comments-cont">
-            {comments}
-          </div>
-
-        </div>
-      </div>
+        {comments}
+        
+      </Model>
     );
   }
 }

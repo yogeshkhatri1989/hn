@@ -5,7 +5,13 @@ module.exports = {
   entry: ["./main.js"],
   output: {
     path: path.resolve(__dirname, 'dist'),
+    publicPath: 'dist',
     filename: "bundle.js"
+  },
+  devServer: {
+    hot: true,
+    inline: true,
+    port: 3000
   },
   module: {
     loaders: [
@@ -14,7 +20,7 @@ module.exports = {
         exclude: /node_modules/,
         loader: "babel-loader",
         options: {
-          presets: ["env", "react"]
+          presets: ["es2015", "react"]
         }
       },
       {
