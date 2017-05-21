@@ -68,7 +68,7 @@ class Story extends Component {
               {
                 story.url ?
                   <a className="story-link" href={story.url} target="_blank">{story.title}</a> :
-                  <Link to={`/story/${storyCont}/${story.id}`}>{story.title}</Link>
+                  <Link className="story-link" to={`/story/${storyCont}/${story.id}`}>{story.title}</Link>
               }
               <span className="url-cont"> ({story.displayUrl})</span>
 

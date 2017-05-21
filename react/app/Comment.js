@@ -44,6 +44,9 @@ class Comment extends Component {
       commentRepliesBtnText = comment.kids && comment.kids.length ? 
         (comment.kids.length == 1 ? "1 Reply" : `${comment.kids.length} Replies`) : 
         "";
+
+      comment.text = DOMPurify.sanitize(comment.text);
+      comment.text = comment.text.replace(/<a/g, "<a target='_blank' ");
       
       if (this.props.isReply && !this.chainShown) {
         setTimeout(() => {
@@ -61,11 +64,11 @@ class Comment extends Component {
 
     return (
       <div className="hn-comment">
-        {this.state.comment ?
+        {comment ?
 
           <div className={comment.type}>
             <div className="comment-text"
-              dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(comment.text)}}>
+              dangerouslySetInnerHTML={{__html: comment.text}}>
             </div>
             
             {comment.type == "comment" && 
