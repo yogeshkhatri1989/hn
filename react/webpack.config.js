@@ -31,5 +31,11 @@ module.exports = {
   },
   plugins: [
     new ExtractTextPlugin("style.css")
-  ]
+  ],
+  resolve: {
+    alias: {
+      "react": "preact-compat",
+      "react-dom": "preact-compat"
+    }
+  }
 }

@@ -14,6 +14,8 @@
   "dependencies": {
     "dompurify": "^0.8.5",
     "firebase": "^3.7.4",
+    "preact": "^8.1.0",
+    "preact-compat": "^3.16.0",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "react-router": "^4.0.0",
