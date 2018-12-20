@@ -1,13 +1,15 @@
 body {
-  background: #EAEAEA;
+  background: rgb(0, 0, 0);
   margin: 0;
   padding: 64px 0 0 0;
   overflow: hidden;
+  font-family: Menlo, Arial, Helvetica, sans-serif;
 
   .header {
     width: 100%;
     height: 64px;
-    background: #077C8B;
+    background: rgb(37, 37, 37);
+    color: white;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -17,7 +19,6 @@ body {
 
     .title {
       font-size: 1.3em;
-      color: white;
       margin: 0 10px;
     }
 
@@ -38,12 +39,28 @@ body {
         text-decoration: none;
         display: inline-block;
         opacity: 0.8;
-        font-family: RobotoDraft, 'Helvetica Neue', Helvetica, Arial;
         text-transform: capitalize;
 
         &.selected {
           opacity: 1;
-          border-bottom: 4px solid #ffff8d;
+          border-bottom: 4px solid white;
+        }
+      }
+    }
+
+
+    @media (min-width: 320px) and (max-width: 767px) {
+      height: 44px;
+      
+      .title {
+        display: none;
+      }
+      .nav-links-cont {
+        left: 0;
+
+        .nav-link {
+          font-size: 1em;
+          width: 60px;
         }
       }
     }
@@ -57,17 +74,18 @@ body {
     padding: 10px 0;
     height: ~"calc(100vh - 88px)";
     overflow: scroll;
+    color: white;
   }
 
   .hn-story {
     width: 450px;
     height: 90px;
-    background: white;
+    background: black;
     display: inline-block;
     vertical-align: top;
+    color: white;
     margin: -1px 0px 0px -1px;
-    border: 1px solid black;
-
+    
     .story-cont {
       height: 100%;
       text-align: left;
@@ -94,11 +112,11 @@ body {
 
       .story-link {
         text-decoration: none;
-        color: black;
+        color: white;
       }
 
       .url-cont {
-        color: gray;
+        color: #4e4e4e;
         font-size: 0.8em;
       }
 
@@ -106,11 +124,12 @@ body {
         position: absolute;
         bottom: 0;
         left: 0;
-        width: 370px;
+        width: 440px;
         height: 20px;
-        color: gray;
+        color: #4e4e4e;
         padding: 4px 8px;
         font-size: 0.85em;
+        display: none;
 
         .story-prop {
           display: inline-block;
@@ -123,20 +142,27 @@ body {
         }
 
       }
+
+      &:hover .bottom-bar {
+        display: block;
+      }
       
     }
 
     .right-side {
-      display: inline-block;
       box-sizing: border-box;
       width: 80px;
       height: 100%;
       vertical-align: middle;
       text-align: center;
-      border-left: 1px solid lightgray;
       padding: 20px 0 0 0;
       color: inherit;
       text-decoration: none;
+      display: none;
+    }
+
+    &:hover .right-side {
+      display: inline-block;
     }
 
     .moveup {
@@ -151,6 +177,25 @@ body {
       animation-duration: 1s;
       animation-iteration-count: 2;
       animation-direction: alternate;
+    }
+
+    @media (min-width: 320px) and (max-width: 767px) {
+      width: 100vw;
+
+      .center-content {
+        width: ~"calc(100vw - 50px)";
+        font-size: 0.9em;
+
+        &:hover .bottom-bar {
+          display: none;
+        }
+      }
+
+      .right-side {
+        display: inline-block;
+        width: 50px;
+        font-size: 0.8em;
+      }
     }
 
   }
@@ -178,13 +223,22 @@ body {
       max-width: 850px;
       width: 90%;
       margin: 20px auto;
-      background: white;
+      background: black;
       position: relative;
+      border: 1px solid white;
 
       .hn-model-title {
         font-size: 1.2em;
         padding: 20px;
-        background: rgba(0, 150, 136, 0.14);
+        background: white;
+        color: black;
+        display: flex;
+
+        .title {
+          text-overflow: ellipsis;
+          overflow: hidden;
+          white-space: nowrap;
+        }
 
         .close-btn {
           font-size: 1.1em;
@@ -200,6 +254,8 @@ body {
         height: ~"calc(100vh - 160px)";
         box-sizing: border-box;
         overflow: scroll;
+        background: black;
+        color: white;
       }
     }
   }
@@ -218,9 +274,9 @@ body {
     }
 
     .bottom-bar {
-      width: 370px;
+      width: 100%;
       height: 20px;
-      color: gray;
+      color: #4e4e4e;
       padding: 4px 0;
       font-size: 0.9em;
       margin-top: 8px;

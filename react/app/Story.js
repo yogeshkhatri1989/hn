@@ -64,7 +64,7 @@ class Story extends Component {
           <div ref="storyCont" className="story-cont">
 
             <div className="center-content">
-              <span className="story-index">{this.props.storyIndex + 1}. </span>
+              {/* <span className="story-index">{this.props.storyIndex + 1}. </span> */}
               {
                 story.url ?
                   <a className="story-link" href={story.url} target="_blank">{story.title}</a> :
