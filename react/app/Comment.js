@@ -86,8 +86,16 @@ class Comment extends Component {
               </div>
             }
 
-            <div className="comment-replies">
-              {replies}
+            <div className="comment-cont">
+              {
+                this.state.replies.length ? <div className="comment-left-border" onClick={(e) => {
+                  this.getReplies();
+                  e.target.scrollIntoViewIfNeeded();
+                }}></div> : ''
+              }
+              <div className="comment-replies">
+                {replies}
+              </div>
             </div>
 
           </div> :
