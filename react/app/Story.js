@@ -21,6 +21,14 @@ class Story extends Component {
     ReactFire.bindAsObject.call(this, ref, "story");
   }
 
+  fetchComments(story) {
+    (story.kids || []).forEach(kid => {
+      if (this.state[`storyComments${kid}`]) return;
+      const ref = this.props.firebaseRootRef.child(`/v0/item/${kid}`);
+      ReactFire.bindAsObject.call(this, ref, `storyComments${kid}`);
+    });
+  }
+
   componentWillUpdate(nextProps, nextState) {
 
     if (!this.state.story) return;
@@ -83,7 +91,7 @@ class Story extends Component {
               </div>
             </div>
 
-            <Link to={`/story/${storyCont}/${story.id}`} className="right-side">
+            <Link to={`/story/${storyCont}/${story.id}`} className="right-side" onMouseEnter={this.fetchComments.bind(this, story)}>
               <span ref="storyDescendants">{story.descendants} Comments</span>
             </Link>
 

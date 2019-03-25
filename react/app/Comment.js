@@ -23,8 +23,16 @@ class Comment extends Component {
 
   componentWillMount() {
     ReactFire.componentWillMount.call(this);
-    let ref = this.props.firebaseRootRef.child(`/v0/item/${this.props.commentId}`);
+    const ref = this.props.firebaseRootRef.child(`/v0/item/${this.props.commentId}`);
     ReactFire.bindAsObject.call(this, ref, "comment");
+  }
+
+  fetchReplies(replies = []) {
+    replies.forEach(reply => {
+      if (this.state[`commentReplies${reply}`]) return;
+      const ref = this.props.firebaseRootRef.child(`/v0/item/${reply}`);
+      ReactFire.bindAsObject.call(this, ref, `commentReplies${reply}`);
+    })
   }
 
   getReplies() {
@@ -80,7 +88,7 @@ class Comment extends Component {
                 </span>
                 <span className="comment-prop comment-time">{comment.timeByAgo}</span>
                 
-                <span className="comment-prop comment-replies-btn" onClick={this.getReplies.bind(this)}>
+                <span className="comment-prop comment-replies-btn" onMouseEnter={this.fetchReplies.bind(this, this.state.comment.kids)} onClick={this.getReplies.bind(this)}>
                   {commentRepliesBtnText}
                 </span>
               </div>
@@ -89,8 +97,8 @@ class Comment extends Component {
             <div className="comment-cont">
               {
                 this.state.replies.length ? <div className="comment-left-border" onClick={(e) => {
-                  this.getReplies();
-                  e.target.scrollIntoViewIfNeeded();
+                  // this.getReplies();
+                  e.target.parentNode.parentNode.scrollIntoView();
                 }}></div> : ''
               }
               <div className="comment-replies">
