@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ReactFire from 'reactfire';
 import Comment from './Comment';
 import Model from './Model';
 

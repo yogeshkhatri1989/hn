@@ -1,7 +1,8 @@
 import React from "react";
 import ReactDom from "react-dom";
-import Firebase from 'firebase';
-import ReactFire from 'reactfire';
+import * as Firebase from 'firebase/app';
+import "firebase/database";
+
 import App from "./app/App";
 
 import { 

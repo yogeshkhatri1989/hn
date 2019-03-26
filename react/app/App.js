@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
-import ReactDom from 'react-dom';
-import Firebase from 'firebase';
 import ReactFire from 'reactfire';
-import { Link } from 'react-router-dom';
 import Story from './Story';
 
 class App extends Component {
