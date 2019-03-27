@@ -17,7 +17,7 @@ class Story extends Component {
 
   componentWillMount() {
     ReactFire.componentWillMount.call(this);
-    let ref = this.props.firebaseRootRef.child(`/v0/item/${this.props.storyId}`);
+    const ref = this.props.firebaseRootRef.child(`/v0/item/${this.props.storyId}`);
     ReactFire.bindAsObject.call(this, ref, "story");
   }
 

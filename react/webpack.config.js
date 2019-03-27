@@ -13,6 +13,7 @@ module.exports = {
     inline: true,
     port: 3000
   },
+  devtool: `source-map`,  
   module: {
     loaders: [
       {

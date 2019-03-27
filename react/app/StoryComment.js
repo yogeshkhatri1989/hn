@@ -15,12 +15,13 @@ class StoryComment extends Component {
 
   render() {
 
-    let kids = this.state.story.kids || [];
-    let storyType = this.props.match.params.storyType;
+    const kids = this.state.story.kids || [];
 
-    storyType == "ask" && kids.unshift(this.state.story.id);
+    if (this.state.story.text && kids[0] !== this.state.story.id) {
+      kids.unshift(this.state.story.id);
+    }
 
-    let comments = (kids).map((kid, index) => (
+    const comments = kids.map((kid, index) => (
       <Comment key={`comment-${index}`} {...this.props} commentId={kid}></Comment>
     ));
 

@@ -2,6 +2,7 @@ import React from "react";
 import ReactDom from "react-dom";
 import * as Firebase from 'firebase/app';
 import "firebase/database";
+import ReactFire from 'reactfire';
 
 import App from "./app/App";
 
@@ -18,18 +19,43 @@ class Main extends React.Component {
 
     super(props);
 
-    let config = {
+    const config = {
       databaseURL: 'https://hacker-news.firebaseio.com/'
     };
 
     Firebase.initializeApp(config);
 
-    let firebaseRootRef = Firebase.database().ref();
+    const firebaseRootRef = Firebase.database().ref();
 
     this.state = {
       firebaseRootRef: firebaseRootRef
     };
 
+  }
+
+  componentWillMount() {
+    ReactFire.componentWillMount.call(this);
+  }
+
+  fetchStoriyIds(storyCont) {
+    if (this.state[`storyIds${storyCont}`]) {
+      ReactFire.unbind.call(this, `storyIds${storyCont}`);
+    }
+    const firebaseRootRef = this.state.firebaseRootRef;
+    const ref = firebaseRootRef.child(`/v0/${storyCont || 'top'}stories`);
+    ReactFire.bindAsObject.call(this, ref, `storyIds${storyCont}`);
+  }
+
+  fetchStories() {
+    console.log(this.state.storyIds);
+    if (this.state.storyIds) {
+      this.state.storyIds.forEach(storyId => {
+        if (this.state[`story${storyId}`]) return;
+        const ref = this.state.firebaseRootRef.child(`/v0/item/${storyId}`);
+        ReactFire.bindAsObject.call(this, ref, `story${storyId}`);
+        this.state[`story${storyId}`] = {};
+      });
+    }
   }
 
   render() {
@@ -49,7 +75,14 @@ class Main extends React.Component {
             <div className="nav-links-cont">
 
               {['top', 'new', 'ask', 'show', 'job'].map(type => (
-                <NavLink key={type} to={'/story/' + type} className="nav-link" activeClassName="selected">
+                <NavLink
+                  key={type}
+                  to={'/story/' + type}
+                  className="nav-link"
+                  activeClassName="selected"
+                  onMouseEnter={this.fetchStoriyIds.bind(this, type)}
+                  onMouseDown={this.fetchStories.bind(this)}>
+                  
                   {type}
                 </NavLink>
               ))}

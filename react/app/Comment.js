@@ -44,7 +44,7 @@ class Comment extends Component {
 
   render() {
 
-    let comment = this.state.comment;
+    const comment = this.state.comment;
     let commentRepliesBtnText = "";
     
     if (comment) {
@@ -64,11 +64,11 @@ class Comment extends Component {
       this.chainShown = true;
     }
 
-    let replies = (this.state.replies.length ? this.state.replies : []).map(replyId => (
+    const replies = (this.state.replies.length ? this.state.replies : []).map(replyId => (
       <Comment key={`comment-${replyId}`} {...this.props} isReply={true} commentId={replyId} />
     ));
-    let storyType = this.props.match.params.storyType;
-    let story = this.props.story;
+    const storyType = this.props.match.params.storyType;
+    const story = this.props.story;
 
     return (
       <div className="hn-comment">
@@ -94,17 +94,20 @@ class Comment extends Component {
               </div>
             }
 
-            <div className="comment-cont">
-              {
-                this.state.replies.length ? <div className="comment-left-border" onClick={(e) => {
-                  // this.getReplies();
-                  e.target.parentNode.parentNode.scrollIntoView();
-                }}></div> : ''
-              }
-              <div className="comment-replies">
-                {replies}
-              </div>
-            </div>
+            {
+              this.state.replies.length ? 
+                <div className="comment-cont">
+                  {
+                    this.state.replies.length ? <div className="comment-left-border" onClick={(e) => {
+                      // this.getReplies();
+                      e.target.parentNode.parentNode.scrollIntoView();
+                    }}></div> : ''
+                  }
+                  <div className="comment-replies">
+                    {replies}
+                  </div>
+                </div> : ""
+            }
 
           </div> :
           "Loading..."

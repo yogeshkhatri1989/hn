@@ -8,25 +8,27 @@ class App extends Component {
 
     super(props);
 
-    this.state = {storyIds: []};
+    this.state = {
+      storyIds: []
+    };
   }
 
   componentWillMount() {
     ReactFire.componentWillMount.call(this);
-    let firebaseRootRef = this.props.firebaseRootRef;
-    let storyCont = this.props.match.params.storyCont;
-    let ref = firebaseRootRef.child(`/v0/${storyCont || 'top'}stories`);
+    const firebaseRootRef = this.props.firebaseRootRef;
+    const storyCont = this.props.match.params.storyCont;
+    const ref = firebaseRootRef.child(`/v0/${storyCont || 'top'}stories`);
     ReactFire.bindAsObject.call(this, ref, "storyIds");
   }
 
   componentWillUpdate(nextProps, nextState) {
 
-    let storyCont = nextProps.match.params.storyCont;
+    const storyCont = nextProps.match.params.storyCont;
     if (this.props.match.params.storyCont == storyCont) return;
 
     ReactFire.unbind.call(this, "storyIds");
-    let firebaseRootRef = this.props.firebaseRootRef;
-    let ref = firebaseRootRef.child(`/v0/${storyCont || 'top'}stories`);
+    const firebaseRootRef = this.props.firebaseRootRef;
+    const ref = firebaseRootRef.child(`/v0/${storyCont || 'top'}stories`);
     ReactFire.bindAsObject.call(this, ref, "storyIds");
   }
 
@@ -36,7 +38,7 @@ class App extends Component {
 
   render() {
 
-    let stories = (this.state.storyIds || [])
+    const stories = (this.state.storyIds || [])
       .slice(0, 30)
       .map((storyId, index) => {
         return (
