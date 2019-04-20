@@ -21,7 +21,7 @@ class Story extends Component {
     ReactFire.bindAsObject.call(this, ref, "story");
   }
 
-  fetchComments(story) {
+  prefetchStoryStuffs(story) {
     (story.kids || []).forEach(kid => {
       if (this.state[`storyComments${kid}`]) return;
       const ref = this.props.firebaseRootRef.child(`/v0/item/${kid}`);
@@ -69,7 +69,7 @@ class Story extends Component {
     return (
       <div className="hn-story">
         {story ? 
-          <div ref="storyCont" className="story-cont">
+          <div ref="storyCont" className="story-cont" onMouseEnter={this.prefetchStoryStuffs.bind(this, story)}>
 
             <div className="center-content">
               {/* <span className="story-index">{this.props.storyIndex + 1}. </span> */}
@@ -91,7 +91,7 @@ class Story extends Component {
               </div>
             </div>
 
-            <Link to={`/story/${storyCont}/${story.id}`} className="right-side" onMouseEnter={this.fetchComments.bind(this, story)}>
+            <Link to={`/story/${storyCont}/${story.id}`} className="right-side">
               <span ref="storyDescendants">{story.descendants} Comments</span>
             </Link>
 
