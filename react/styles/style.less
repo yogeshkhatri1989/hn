@@ -71,7 +71,7 @@ body {
     text-align: center;
     position: relative;
     z-index: 10;
-    padding: 10px 0;
+    padding: 20px 0;
     height: ~"calc(100vh - 88px)";
     overflow: scroll;
     color: white;
@@ -79,13 +79,14 @@ body {
 
   .hn-story {
     width: 450px;
-    height: 90px;
-    background: black;
+    height: 100px;
     display: inline-block;
     vertical-align: top;
     color: white;
-    margin: -1px 0px 0px -1px;
-    border: 1px solid #5a5a5a;
+    margin: 0px 20px 20px 0px;
+    background: rgb(37, 37, 37);
+    border-radius: 10px;
+    overflow: hidden;
     
     .story-cont {
       height: 100%;
@@ -104,8 +105,9 @@ body {
       height: 100%;
       vertical-align: top;
       text-align: left;
-      padding: 6px 6px;
+      padding: 10px;
       position: relative;
+      box-shadow: 8px 0px 10px -10px #696969 inset;
 
       .story-index {
         color: gray;
@@ -130,7 +132,6 @@ body {
         color: #4e4e4e;
         padding: 4px 8px;
         font-size: 0.85em;
-        display: none;
 
         .story-prop {
           display: inline-block;
@@ -144,9 +145,9 @@ body {
 
       }
 
-      &:hover .bottom-bar {
-        display: block;
-      }
+      // &:hover .bottom-bar {
+      //   display: block;
+      // }
       
     }
 
@@ -160,7 +161,7 @@ body {
       color: inherit;
       text-decoration: none;
       display: inline-block;
-      border-left: 1px solid #1e1e1e;
+      box-shadow: -8px 0px 10px -10px #696969 inset;
     }
 
     .moveup {
