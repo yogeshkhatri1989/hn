@@ -16,6 +16,7 @@ body {
     position: fixed;
     top: 0;
     z-index: 100;
+    box-shadow: inset 0px -10px 10px -16px #ffffff;
 
     .title {
       font-size: 1.3em;
@@ -179,24 +180,31 @@ body {
     }
 
     @media (min-width: 320px) and (max-width: 767px) {
-      width: 100vw;
+      width: initial;
+      margin: 10px;
 
       .center-content {
-        width: ~"calc(100vw - 50px)";
+        width: ~"calc(100vw - 80px)";
         font-size: 0.9em;
 
-        &:hover .bottom-bar {
-          display: none;
-        }
       }
 
       .right-side {
         display: inline-block;
-        width: 50px;
+        width: 60px;
         font-size: 0.8em;
       }
     }
 
+  }
+
+  @media (min-width: 320px) and (max-width: 767px) {
+    
+    padding-top: 48px;
+
+    .stories-cont {
+      padding-top: 0;
+    }
   }
 
 
