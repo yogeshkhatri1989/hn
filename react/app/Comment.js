@@ -54,7 +54,7 @@ class Comment extends Component {
         "";
 
       comment.text = DOMPurify.sanitize(comment.text);
-      comment.text = comment.text.replace(/<a/g, "<a target='_blank' ");
+      comment.text = comment.text.replace(/<a/g, "<a target='_blank' class='comment-link' ");
       
       if (this.props.isReply && !this.chainShown) {
         setTimeout(() => {
